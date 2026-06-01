@@ -1,4 +1,4 @@
-# 🌐 NetVision v2.0
+# 🌐 NetVision
 
 NetVision is a high-performance, cyberpunk-themed local network scanner. It provides a real-time visual dashboard for monitoring active devices, identifying vendors, and auditing network security through port analysis.
 
