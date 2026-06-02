@@ -1,34 +1,36 @@
-# 🌐 NetVision
+# NETVISION 🌐
+<img width="1915" height="993" alt="image" src="https://github.com/user-attachments/assets/f5dd948c-c836-47fa-9381-0e7d14f12605" />
 
-NetVision is a high-performance, cyberpunk-themed local network scanner. It provides a real-time visual dashboard for monitoring active devices, identifying vendors, and auditing network security through port analysis.
+**Asynchronous low-level home network scanner and service fingerprinting dashboard.**
 
-<img width="1917" height="993" alt="image" src="https://github.com/user-attachments/assets/bbd5ab62-92ad-4bc9-b726-3aa908cfe2e3" />
+NETVISION is a lightweight, zero-dependency network security auditor and monitoring dashboard designed to map local subnets in real-time. Instead of relying on heavy third-party scanning frameworks, it utilizes an asynchronous event-driven Python backend to coordinate concurrent ping sweeps, resolve local hostnames, and perform low-level TCP socket banner-grabbing to identify active services and operating system footprints.
+
+---
 
 ## Features
 
-*   **Recursive Discovery:** 254+ nodes analyzed in seconds using multi-threaded ICMP requests.
-*   **OS Fingerprinting:** Advanced logic to guess operating systems (Windows, Linux, Mobile) via port signatures.
-*   **Hardware Identification:** Automatic vendor detection (TP-Link, Apple, Samsung) using a built-in MAC-prefix database.
-*   **Cyberpunk Dashboard:** Interactive dark-mode UI with a grid background, neon hover effects, and smooth animations.
-*   **Live Latency Tracking:** Real-time ping monitoring to evaluate connection stability and node response time.
-*   **Security Auditing:** Integrated port scanner to detect open services like SSH, HTTP, and SMB.
-*   **Privacy Protected:** For security reasons, all sensitive hardware identifiers (MAC addresses) are masked in public previews.
-*   **Zero-Dependency:** Built with pure Vanilla JS and standard Python libraries for maximum execution speed.
+*   **Asynchronous Event Streaming:** Implements Server-Sent Events (SSE) to stream active host discoveries to the web interface progressively, eliminating blocking render delays.
+*   **Low-Level Service Fingerprinting:** Establishes raw TCP connections to common ports (SSH, HTTP, SMB) to read service banners directly from network sockets, exposing exact application versions.
+*   **Intruder Mitigation System:** Leverages local browser storage (`localStorage`) to maintain a persistent hardware whitelist, instantly flagging unknown MAC addresses with a glowing visual alarm.
+*   **Non-Blocking Concurrent Sweeping:** Coordinates a fast ping sweep of all 254 subnet addresses in parallel using a Python `ThreadPoolExecutor` worker pool.
+*   **Dynamic Information Drawers:** Features smooth CSS-animated drawer transitions on the device cards, allowing users to expand nodes to inspect raw service banners.
+*   **Standardized JSON Reporting:** Serializes mapped network nodes, resolved hostnames, and grabbed service metadata into a downloadable, structured JSON forensic report.
+*   **Data Masking Standards:** Built with privacy in mind; sensitive physical hardware addresses (MACs) are masked inside public dashboard presentations to prevent physical network correlation.
+
+---
 
 ## How to run
 
-1.  **Start the Backend:** Run `python server.py` to launch the multi-threaded scanning engine on port 5005.
-2.  **Launch Dashboard:** Open `index.html` in any modern web browser (VS Code Live Server recommended).
-3.  **Execute Scan:** Click the **RUN DEEP SCAN** button to begin mapping your local network environment.
-
-**Note:** The scanner is optimized for the `192.168.0.x` range. Ensure your backend is running with appropriate permissions to access network utilities.
-
-## Tech stack
-
-*   **HTML5** — semantic structure and grid-based dashboard layout.
-*   **CSS3** — custom cyberpunk theme with radial-gradient backgrounds and glow-on-hover effects.
-*   **Vanilla JavaScript** — core engine for asynchronous data fetching and dynamic DOM rendering.
-*   **Python 3** — algorithmic multi-threaded engine for ARP and TCP port scanning.
+1.  **Administrative Access:** Open PowerShell, command prompt, or terminal as an Administrator to ensure full permissions for ARP table queries and system pings.
+2.  **Clone the Repository:** Download the project files and place them in your local workspace directory:
+    ```bash
+    git clone https://github.com/d3fuse99/Netvision.git
+    ```
+3.  **Start the Backend Engine:** Execute the Python script using standard Python 3:
+    ```bash
+    python server.py
+    ```
+4.  **Launch Web Dashboard:** Open the `index.html` file in any modern web browser. For real-time updates and proper SSE execution, serving it via a local static server (like VS Code Live Server) is recommended.
 
 ## Project structure
 
