@@ -11,16 +11,21 @@
             <div class="logo">
                 <span class="net">NET</span><span class="vision">VISION</span>
             </div>
-            <button id="scan-btn" onclick="startScan()">RUN DEEP SCAN</button>
+            <div class="header-controls">
+                <button id="reset-btn" onclick="clearDatabase()">RESET DATABASE</button>
+                <button id="export-btn" onclick="exportJSON()" disabled>EXPORT REPORT</button>
+                <button id="scan-btn" onclick="startScan()">RUN DEEP SCAN</button>
+            </div>
         </header>
+
+        <div class="progress-container">
+            <div id="progress-bar" class="progress-bar"></div>
+        </div>
 
         <div class="main-layout">
             <aside class="console-box">
                 <div class="box-label">SYSTEM_LOG</div>
-                <div id="console-out" class="console-content">
-                    > System ready...<br>
-                    > Waiting for scan command...
-                </div>
+                <div id="console-out" class="console-content">> System ready...<br>> Waiting for scan command...</div>
             </aside>
 
             <main class="results-box">
