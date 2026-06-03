@@ -1,21 +1,11 @@
 let logHistory = "";
 let currentSessionData = [];
 
-function escapeHTML(str) {
-    if (!str) return '';
-    return str.toString()
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
-}
-
 function log(text) {
     const out = document.getElementById('console-out');
-    const sanitized = escapeHTML(text);
-    logHistory += `&gt; ${sanitized}\n`;
-    out.innerHTML = logHistory;
+    const div = document.createElement('div');
+    div.textContent = `> ${text}`;
+    out.appendChild(div);
     out.scrollTop = out.scrollHeight;
 }
 
@@ -102,13 +92,14 @@ function startScan() {
     const grid = document.getElementById('device-grid');
     const count = document.getElementById('total-count');
     const bar = document.getElementById('progress-bar');
+    const out = document.getElementById('console-out');
     
     btn.disabled = true;
     exportBtn.disabled = true;
-    grid.innerHTML = '';
+    grid.textContent = '';
     count.innerText = '0';
     bar.style.width = '0%';
-    logHistory = "";
+    out.textContent = '';
     currentSessionData = [];
     
     log("INITIALIZING_DEEP_SCAN...");
@@ -147,56 +138,97 @@ function startScan() {
         
         const cleanMacId = data.mac.replace(/:/g, '').replace(/[^\w]/g, '');
         const cardId = `dev-${cleanMacId}`;
+        
         const card = document.createElement('div');
         card.className = `card ${isNew ? 'intruder' : ''}`;
         card.id = cardId;
-        card.setAttribute('onclick', 'toggleCard(this)');
-        
-        let bannersHtml = "";
+        card.onclick = function() { toggleCard(this); };
+
+        const innerContainer = document.createElement('div');
+
+        const cardTop = document.createElement('div');
+        cardTop.className = 'card-top';
+
+        const vendorSpan = document.createElement('span');
+        vendorSpan.textContent = data.vendor;
+
+        const statusSpan = document.createElement('span');
+        statusSpan.textContent = isNew ? 'WARNING_NODE' : 'ONLINE';
+        statusSpan.style.color = isNew ? 'var(--red)' : 'var(--green)';
+
+        cardTop.appendChild(vendorSpan);
+        cardTop.appendChild(statusSpan);
+
+        const ipHeader = document.createElement('h3');
+        ipHeader.textContent = data.ip;
+
+        const osDiv = document.createElement('div');
+        osDiv.className = 'os';
+        osDiv.textContent = data.name;
+
+        const macDiv = document.createElement('div');
+        macDiv.className = 'mac';
+        macDiv.textContent = data.mac;
+
+        const drawer = document.createElement('div');
+        drawer.className = 'drawer';
+
         const portKeys = Object.keys(data.ports);
         if (portKeys.length > 0) {
-            bannersHtml += `<div class="drawer-title">Active Services:</div>`;
+            const drawerTitle = document.createElement('div');
+            drawerTitle.className = 'drawer-title';
+            drawerTitle.textContent = 'Active Services:';
+            drawer.appendChild(drawerTitle);
+
             portKeys.forEach(port => {
-                const cleanPort = escapeHTML(port);
-                const cleanService = escapeHTML(data.ports[port].service);
-                const cleanBanner = escapeHTML(data.ports[port].banner);
-                bannersHtml += `
-                    <div class="banner-item">
-                        <strong>Port ${cleanPort} (${cleanService}):</strong><br>
-                        ${cleanBanner}
-                    </div>`;
+                const bannerItem = document.createElement('div');
+                bannerItem.className = 'banner-item';
+
+                const strongText = document.createElement('strong');
+                strongText.textContent = `Port ${port} (${data.ports[port].service}):`;
+                
+                const brNode = document.createElement('br');
+                const textNode = document.createTextNode(data.ports[port].banner);
+
+                bannerItem.appendChild(strongText);
+                bannerItem.appendChild(brNode);
+                bannerItem.appendChild(textNode);
+                drawer.appendChild(bannerItem);
             });
         } else {
-            bannersHtml += `<div class="drawer-title">No visible services active.</div>`;
+            const drawerTitle = document.createElement('div');
+            drawerTitle.className = 'drawer-title';
+            drawerTitle.textContent = 'No visible services active.';
+            drawer.appendChild(drawerTitle);
         }
 
-        const cleanVendor = escapeHTML(data.vendor);
-        const cleanIp = escapeHTML(data.ip);
-        const cleanName = escapeHTML(data.name);
-        const cleanMac = escapeHTML(data.mac);
+        innerContainer.appendChild(cardTop);
+        innerContainer.appendChild(ipHeader);
+        innerContainer.appendChild(osDiv);
+        innerContainer.appendChild(macDiv);
+        innerContainer.appendChild(drawer);
 
-        card.innerHTML = `
-            <div>
-                <div class="card-top">
-                    <span>${cleanVendor}</span>
-                    <span style="color: ${isNew ? 'var(--red)' : 'var(--green)'}">
-                        ${isNew ? 'WARNING_NODE' : 'ONLINE'}
-                    </span>
-                </div>
-                <h3>${cleanIp}</h3>
-                <div class="os">${cleanName}</div>
-                <div class="mac">${cleanMac}</div>
-                <div class="drawer">
-                    ${bannersHtml}
-                </div>
-            </div>
-            <div class="port-tags">
-                <span class="port-tag ${isNew ? 'intruder-tag' : ''}">
-                    ${isNew ? 'INTRUDER_ALERT' : 'ONLINE'}
-                </span>
-                ${isNew ? `<button class="trust-btn" onclick="trustDevice('${cleanMac}', '${cardId}', event)">TRUST</button>` : ''}
-            </div>
-        `;
+        const portTags = document.createElement('div');
+        portTags.className = 'port-tags';
+
+        const portTagSpan = document.createElement('span');
+        portTagSpan.className = `port-tag ${isNew ? 'intruder-tag' : ''}`;
+        portTagSpan.textContent = isNew ? 'INTRUDER_ALERT' : 'ONLINE';
+
+        portTags.appendChild(portTagSpan);
+
+        if (isNew) {
+            const trustBtn = document.createElement('button');
+            trustBtn.className = 'trust-btn';
+            trustBtn.textContent = 'TRUST';
+            trustBtn.onclick = function(event) {
+                trustDevice(data.mac, cardId, event);
+            };
+            portTags.appendChild(trustBtn);
+        }
+
+        card.appendChild(innerContainer);
+        card.appendChild(portTags);
         grid.appendChild(card);
     };
 
