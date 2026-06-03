@@ -7,6 +7,12 @@ NETVISION is a lightweight, zero-dependency network security auditor and monitor
 
 ---
 
+## 📖 Project Documentation
+For deep system architectural details, AppSec hardening strategies, and execution guidelines, please visit the official project database:
+👉 **[NetVision Wiki Dashboard](https://github.com/d3fuse99/Netvision/wiki)**
+
+---
+
 ## Features
 
 *   **Asynchronous Event Streaming:** Implements Server-Sent Events (SSE) to stream active host discoveries to the web interface progressively, eliminating blocking render delays.
