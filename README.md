@@ -1,5 +1,5 @@
 # NETVISION 🌐
-<img width="1915" height="993" alt="image" src="https://github.com/user-attachments/assets/b8aa5a77-94ab-4b58-a3c9-5f618c4f290b" />
+<img width="2559" height="1315" alt="image" src="https://github.com/user-attachments/assets/c0cca96c-a545-471a-ac5b-b5f3e4f5c0d1" />
 
 **Asynchronous low-level home network scanner and security auditor.**
 
@@ -16,6 +16,7 @@ For deep system architectural details, AppSec hardening strategies, and executio
 ## Features
 
 *   **Asynchronous Event Streaming:** Implements Server-Sent Events (SSE) to stream active host discoveries to the web interface progressively, eliminating blocking render delays.
+*   **Dynamic Thread Allocation:** Features an interactive UI slider letting users configure scanning concurrency (10 to 100 threads) dynamically passed via SSE query parameters.
 *   **Low-Level Service Fingerprinting:** Establishes raw TCP connections to common ports (SSH, HTTP, SMB) to read service banners directly from network sockets, exposing exact application versions.
 *   **Intruder Detection System:** Leverages local browser storage (`localStorage`) to maintain a persistent hardware whitelist, instantly flagging unknown MAC addresses with a glowing visual alarm.
 *   **Non-Blocking Concurrent Sweeping:** Coordinates a fast ping sweep of all 254 subnet addresses in parallel using a Python `ThreadPoolExecutor` worker pool.
@@ -52,4 +53,4 @@ For deep system architectural details, AppSec hardening strategies, and executio
 
 ## Project structure
 
-<img width="286" height="140" alt="image" src="https://github.com/user-attachments/assets/c2024b92-b238-404c-ac2e-d8ef36f73d28" />
+<img width="297" height="198" alt="image" src="https://github.com/user-attachments/assets/f157014b-0051-45c6-bcb5-b8f4ec6a315d" />
